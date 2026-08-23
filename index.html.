@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Baltimore After Dark — L3EON</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body{
+  margin:0;
+  background:#08050c;
+  color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+button{
+  font:inherit;
+  color:inherit;
+}
+
+.app{
+  max-width:900px;
+  margin:auto;
+  min-height:100vh;
+  padding:18px;
+  background:
+    radial-gradient(circle at top,#54205f 0,#211029 35%,#08050c 75%);
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.logo{
+  font-size:34px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.logo span{
+  color:#d15cff;
+}
+
+.day{
+  background:#160c1d;
+  border:1px solid #633174;
+  border-radius:30px;
+  padding:11px 17px;
+  font-size:14px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:9px;
+  margin-bottom:18px;
+}
+
+.stat{
+  background:#110a16;
+  border:1px solid #27152e;
+  border-radius:18px;
+  padding:13px 5px;
+  text-align:center;
+}
+
+.stat .icon{
+  font-size:18px;
+}
+
+.stat strong{
+  display:block;
+  font-size:20px;
+  margin-top:4px;
+}
+
+.card{
+  background:#130c18;
+  border:1px solid #482153;
+  border-radius:27px;
+  padding:24px;
+  margin-bottom:18px;
+  box-shadow:0 12px 40px rgba(0,0,0,.25);
+}
+
+h1{
+  font-size:42px;
+  line-height:1;
+  margin:10px 0;
+}
+
+h2{
+  font-size:25px;
+  margin:0 0 10px;
+}
+
+p{
+  color:#c8b9cf;
+  font-size:17px;
+  line-height:1.55;
+}
+
+.hero{
+  text-align:center;
+  padding:32px 20px;
+}
+
+.heroEmoji{
+  font-size:60px;
+}
+
+.subtitle{
+  color:#cdbbd4;
+  font-size:18px;
+  margin-bottom:25px;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+}
+
+.primary{
+  width:100%;
+  padding:18px;
+  border-radius:22px;
+  background:linear-gradient(90deg,#8050ef,#d451d9);
+  font-weight:900;
+  font-size:18px;
+  margin:7px 0;
+}
+
+.secondary{
+  width:100%;
+  padding:17px;
+  border-radius:22px;
+  background:#211326;
+  border:1px solid #633174;
+  font-weight:800;
+  margin:7px 0;
+}
+
+.choices{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.choice{
+  background:#190f20;
+  border:1px solid #633174;
+  border-radius:22px;
+  padding:20px;
+  text-align:left;
+  min-height:145px;
+}
+
+.choice:active{
+  transform:scale(.98);
+}
+
+.choice .emoji{
+  font-size:38px;
+  display:block;
+  margin-bottom:12px;
+}
+
+.choice strong{
+  font-size:21px;
+  display:block;
+}
+
+.choice small{
+  color:#bcaec3;
+  display:block;
+  margin-top:6px;
+  line-height:1.4;
+}
+
+.bar{
+  height:10px;
+  background:#25172a;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:7px;
+}
+
+.fill{
+  height:100%;
+  background:linear-gradient(90deg,#8150ed,#df5be2);
+  transition:.4s;
+}
+
+.unlock{
+  display:flex;
+  justify-content:space-between;
+  padding:15px 0;
+  border-bottom:1px solid #2a1b30;
+  color:#cdbbd4;
+}
+
+.unlock:last-child{
+  border-bottom:0;
+}
+
+.open{
+  color:#fff;
+  font-weight:900;
+}
+
+.locked{
+  color:#777;
+}
+
+.event{
+  text-align:center;
+}
+
+.eventIcon{
+  font-size:60px;
+}
+
+.result{
+  background:#1a1020;
+  border:1px solid #633174;
+  border-radius:20px;
+  padding:20px;
+  margin-top:15px;
+}
+
+.result.good{
+  border-color:#7ddf9a;
+}
+
+.result.bad{
+  border-color:#df6f78;
+}
+
+.history{
+  max-height:240px;
+  overflow:auto;
+}
+
+.historyItem{
+  padding:12px 0;
+  border-bottom:1px solid #281a2d;
+  color:#cdbbd4;
+}
+
+.rank{
+  font-size:22px;
+  font-weight:900;
+  color:#d65cff;
+}
+
+.footer{
+  text-align:center;
+  color:#67566e;
+  padding:15px;
+  font-size:13px;
+}
+
+@media(max-width:650px){
+  .stats{
+    grid-template-columns:repeat(5,1fr);
+  }
+
+  .stat strong{
+    font-size:16px;
+  }
+
+  .choices{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .choice{
+    min-height:135px;
+    padding:15px;
+  }
+
+  .choice .emoji{
+    font-size:30px;
+  }
+
+  h1{
+    font-size:34px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+  <div class="logo">L3<span>EON</span></div>
+  <div class="day" id="dayDisplay">DAY 1 • 8 PM</div>
+</header>
+
+<div class="stats">
+  <div class="stat">
+    <div class="icon">💵</div>
+    <strong id="cash">$500</strong>
+  </div>
+
+  <div class="stat">
+    <div class="icon">👥</div>
+    <strong id="fans">0</strong>
+  </div>
+
+  <div class="stat">
+    <div class="icon">⭐</div>
+    <strong id="fame">0</strong>
+  </div>
+
+  <div class="stat">
+    <div class="icon">🎤</div>
+    <strong id="skill">10</strong>
+  </div>
+
+  <div class="stat">
+    <div class="icon">🔥</div>
+    <strong id="streak">0</strong>
+    <div class="bar">
+      <div class="fill" id="streakBar"></div>
+    </div>
+  </div>
+</div>
+
+<div id="game"></div>
+
+<div class="footer">
+  BALTIMORE AFTER DARK • L3EON
+</div>
+
+</div>
+
+<script>
+
+const defaultGame = {
+  day:1,
+  cash:500,
+  fans:0,
+  fame:0,
+  skill:10,
+  reputation:0,
+  streak:0,
+  neighborhood:"Gilmore Homes",
+  unlocked:["Neighborhood"],
+  career:"Neighborhood Talent",
+  wins:0,
+  losses:0,
+  history:[]
+};
+
+let game = JSON.parse(localStorage.getItem("l3eonBaltimore")) || defaultGame;
+
+function save(){
+  localStorage.setItem("l3eonBaltimore",JSON.stringify(game));
+}
+
+function clamp(n,min,max){
+  return Math.max(min,Math.min(max,n));
+}
+
+function money(n){
+  return "$"+Math.max(0,Math.floor(n)).toLocaleString();
+}
+
+function rank(){
+  if(game.fame>=500) return "BALTIMORE HEADLINER 👑";
+  if(game.fame>=300) return "MAIN STAGE ARTIST";
+  if(game.fame>=180) return "CITY ARTIST";
+  if(game.fame>=100) return "RISING ARTIST";
+  if(game.fame>=50) return "LOCAL FAVORITE";
+  return "NEIGHBORHOOD TALENT";
+}
+
+function updateStats(){
+
+  document.getElementById("cash").textContent=money(game.cash);
+  document.getElementById("fans").textContent=game.fans;
+  document.getElementById("fame").textContent=game.fame;
+  document.getElementById("skill").textContent=game.skill;
+  document.getElementById("streak").textContent=game.streak;
+
+  let pct=clamp(game.streak*20,0,100);
+  document.getElementById("streakBar").style.width=pct+"%";
+
+  document.getElementById("dayDisplay").textContent=
+    "DAY "+game.day+" • 8 PM";
+}
+
+function advanceDay(){
+  game.day++;
+  save();
+  updateStats();
+}
+
+function log(text){
+  game.history.unshift("Day "+game.day+" — "+text);
+
+  if(game.history.length>20){
+    game.history.pop();
+  }
+
+  save();
+}
+
+function renderHome(){
+
+  updateStats();
+
+  document.getElementById("game").innerHTML=`
+
+  <section class="card hero">
+
+    <div class="heroEmoji">🌃🎤</div>
+
+    <h1>BALTIMORE<br>AFTER DARK</h1>
+
+    <div class="subtitle">
+      Build L3EON from neighborhood talent
+      into a Baltimore headliner.
+    </div>
+
+    <div class="rank">
+      ${rank()}
+    </div>
+
+    <button class="primary" onclick="enterCity()">
+      🌃 ENTER THE CITY
+    </button>
+
+    <button class="secondary" onclick="showProfile()">
+      👑 MY L3EON
+    </button>
+
+  </section>
+
+  <section class="card">
+
+    <h2>🎯 TONIGHT'S OBJECTIVE</h2>
+
+    <p>
+      Make your next move. Every decision changes
+      your money, fans, fame, skill and reputation.
+    </p>
+
+    <button class="secondary" onclick="chooseMove()">
+      CHOOSE YOUR MOVE
+    </button>
+
+  </section>
+
+  <section class="card">
+
+    <h2>🔓 CITY UNLOCKS</h2>
+
+    <div class="unlock">
+      <span>Neighborhood</span>
+      <span class="open">OPEN</span>
+    </div>
+
+    <div class="unlock">
+      <span>Downtown</span>
+      <span class="${game.fame>=50?'open':'locked'}">
+        ${game.fame>=50?'OPEN':'🔒 50 FAME'}
+      </span>
+    </div>
+
+    <div class="unlock">
+      <span>The Industry</span>
+      <span class="${game.fame>=120?'open':'locked'}">
+        ${game.fame>=120?'OPEN':'🔒 120 FAME'}
+      </span>
+    </div>
+
+    <div class="unlock">
+      <span>Main Stage</span>
+      <span class="${game.fame>=250?'open':'locked'}">
+        ${game.fame>=250?'OPEN':'🔒 250 FAME'}
+      </span>
+    </div>
+
+  </section>
+  `;
+
+}
+
+function enterCity(){
+
+  document.getElementById("game").innerHTML=`
+
+  <section class="card">
+
+    <h2>🌃 BALTIMORE IS AWAKE</h2>
+
+    <p>
+      The city lights are on. The bass is shaking
+      the block. What are you doing tonight?
+    </p>
+
+    <div class="choices">
+
+      <button class="choice" onclick="drumBattle()">
+        <span class="emoji">🥁</span>
+        <strong>The Line</strong>
+        <small>Drum battles<br>Cash + skill</small>
+      </button>
+
+      <button class="choice" onclick="openMic()">
+        <span class="emoji">🎤</span>
+        <strong>The Stage</strong>
+        <small>Open mic<br>Fans + fame</small>
+      </button>
+
+      <button class="choice" onclick="grind()">
+        <span class="emoji">💼</span>
+        <strong>The Grind</strong>
+        <small>Earn cash<br>Safe move</small>
+      </button>
+
+      <button class="choice" onclick="explore()">
+        <span class="emoji">🚗</span>
+        <strong>Explore</strong>
+        <small>Random encounter<br>Risk + reward</small>
+      </button>
+
+    </div>
+
+  </section>
+
+  <section class="card">
+
+    <h2>🔓 UNLOCKS</h2>
+
+    <div class="unlock">
+      <span>Downtown</span>
+      <span class="${game.fame>=50?'open':'locked'}">
+        ${game.fame>=50?'OPEN':'🔒'}
+      </span>
+    </div>
+
+    <div class="unlock">
+      <span>The Industry</span>
+      <span class="${game.fame>=120?'open':'locked'}">
+        ${game.fame>=120?'OPEN':'🔒'}
+      </span>
+    </div>
+
+    <div class="unlock">
+      <span>Main Stage</span>
+      <span class="${game.fame>=250?'open':'locked'}">
+        ${game.fame>=250?'OPEN':'🔒'}
+      </span>
+    </div>
+
+  </section>
+
+  <button class="secondary" onclick="renderHome()">
+    ← BACK
+  </button>
+
+  `;
+
+}
+
+function drumBattle(){
+
+  let opponent=
+    game.skill<30 ? "The Westside Drummer" :
+    game.skill<60 ? "The Block Captain" :
+    game.skill<100 ? "The Drumline Killer" :
+    "The Baltimore Beast";
+
+  document.getElementById("game").innerHTML=`
+
+  <section class="card event">
+
+    <div class="eventIcon">🥁</div>
+
+    <h2>THE LINE</h2>
+
+    <p>
+      ${opponent} steps into the circle.
+      The crowd starts yelling.
+    </p>
+
+    <p>
+      Your skill: <b>${game.skill}</b>
+    </p>
+
+    <button class="primary" onclick="battleResult()">
+      🥁 STEP INTO THE CIRCLE
+    </button>
+
+    <button class="secondary" onclick="chooseMove()">
+      ← CHANGE MOVE
+    </button>
+
+  </section>
+  `;
+
+}
+
+function battleResult(){
+
+  let opponentPower=15+Math.floor(Math.random()*70);
+
+  let advantage=game.skill+Math.floor(Math.random()*35);
+
+  if(advantage>=opponentPower){
+
+    let cash=80+Math.floor(Math.random()*120);
+    let fans=10+Math.floor(Math.random()*25);
+    let fame=8+Math.floor(Math.random()*18);
+
+    game.cash+=cash;
+    game.fans+=fans;
+    game.fame+=fame;
+    game.skill+=3;
+    game.reputation+=5;
+    game.streak++;
+
+    game.wins++;
+
+    log("Won a drum battle and earned "+money(cash)+".");
+
+    result(
+      "🔥 THE CROWD WENT CRAZY!",
+      "You won the battle.",
+      `+${money(cash)} • +${fans} fans • +${fame} fame • +3 skill`,
+      true
+    );
+
+  }else{
+
+    game.skill+=1;
+    game.streak=0;
+    game.reputation=Math.max(0,game.reputation-2);
+
+    game.losses++;
+
+    log("Lost a drum battle but gained experience.");
+
+    result(
+      "🥁 YOU GOT CHECKED.",
+      "The other drummer took the round.",
+      "+1 skill. Come back stronger.",
+      false
+    );
+
+  }
+
+}
+
+function openMic(){
+
+  document.getElementById("game").innerHTML=`
+
+  <section class="card event">
+
+    <div class="eventIcon">🎤</div>
+
+    <h2>THE OPEN MIC</h2>
+
+    <p>
+      A small Baltimore crowd is waiting.
+      You have one shot to make them remember L3EON.
+    </p>
+
+    <button class="primary" onclick="perform(1)">
+      🎶 PLAY IT SAFE
+    </button>
+
+    <button class="secondary" onclick="perform(2)">
+      🔥 GO ALL OUT
+    </button>
+
+    <button class="secondary" onclick="perform(3)">
+      👑 STEAL THE SHOW
+    </button>
+
+  </section>
+  `;
+
+}
+
+function perform(type){
+
+  let chance=
+    type===1 ? .80 :
+    type===2 ? .62 :
+    .42;
+
+  chance+=game.skill/500;
+
+  if(Math.random()<chance){
+
+    let fans=
+      type===1 ? 15 :
+      type===2 ? 35 :
+      70;
+
+    let fame=
+      type===1 ? 10 :
+      type===2 ? 25 :
+      50;
+
+    game.fans+=fans;
+    game.fame+=fame;
+    game.skill+=type===3?5:2;
+    game.streak++;
+
+    if(type===3){
+      game.cash+=100;
+    }
+
+    log("Killed the open mic.");
+
+    result(
+      "🎤 THE ROOM IS YOURS!",
+      "L3EON just made a statement.",
+      `+${fans} fans • +${fame} fame • +skill`,
+      true
+    );
+
+  }else{
+
+    game.streak=0;
+    game.skill+=1;
+
+    log("The open mic didn't go as planned.");
+
+    result(
+      "😬 TOUGH ROOM.",
+      "Not every performance is a win.",
+      "+1 skill. Learn from it.",
+      false
+    );
+
+  }
+
+}
+
+function grind(){
+
+  let jobs=[
+    ["🎧 Studio Session",120],
+    ["📦 Late Night Delivery",95],
+    ["🥁 Band Practice",75],
+    ["🚗 Rideshare Run",110],
+    ["🎛️ Beat Session",140]
+  ];
+
+  let job=jobs[Math.floor(Math.random()*jobs.length)];
+
+  game.cash+=job[1];
+  game.skill+=1;
+
+  log("Worked: "+job[0]+".");
+
+  result(
+    "💼 THE GRIND",
+    job[0],
+    `+${money(job[1])} • +1 skill`,
+    true
+  );
+
+}
+
+function explore(){
+
+  let events=[
+
+    {
+      icon:"👀",
+      title:"A PRODUCER SPOTS YOU",
+      text:"Someone heard you perform and wants to hear more.",
+      good:()=>{
+        game.fame+=25;
+        game.fans+=20;
+      },
+      reward:"+25 fame • +20 fans"
+    },
+
+    {
+      icon:"💵",
+      title:"CASH ON THE BLOCK",
+      text:"You find an envelope tucked near a bench.",
+      good:()=>{
+        game.cash+=180;
+      },
+      reward:"+$180"
+    },
+
+    {
+      icon:"🥁",
+      title:"POP-UP DRUM BATTLE",
+      text:"A crowd forms before you can even think.",
+      good:()=>{
+        game.skill+=5;
+        game.fame+=15;
+      },
+      reward:"+5 skill • +15 fame"
+    },
+
+    {
+      icon:"🚨",
+      title:"WRONG PLACE, WRONG TIME",
+      text:"Tonight's adventure gets a little too hectic.",
+      good:()=>{
+        game.cash=Math.max(0,game.cash-75);
+        game.streak=0;
+      },
+      reward:"-$75 • streak reset"
+    },
+
+    {
+      icon:"📱",
+      title:"THE VIDEO GOES VIRAL",
+      text:"Someone recorded your performance.",
+      good:()=>{
+        game.fans+=60;
+        game.fame+=35;
+      },
+      reward:"+60 fans • +35 fame"
+    }
+
+  ];
+
+  let e=events[Math.floor(Math.random()*events.length)];
+
+  e.good();
+
+  log(e.title);
+
+  result(
+    e.icon+" "+e.title,
+    e.text,
+    e.reward,
+    !e.title.includes("WRONG")
+  );
+
+}
+
+function result(title,text,reward,good){
+
+  advanceDay();
+
+  document.getElementById("game").innerHTML=`
+
+  <section class="card event">
+
+    <div class="result ${good?'good':'bad'}">
+
+      <h2>${title}</h2>
+
+      <p>${text}</p>
+
+      <h3>${reward}</h3>
+
+    </div>
+
+    <button class="primary" onclick="renderHome()">
+      🌃 CONTINUE
+    </button>
+
+  </section>
+
+  <section class="card">
+
+    <h2>📊 CAREER</h2>
+
+    <p>
+      Rank: <b>${rank()}</b><br>
+      Wins: ${game.wins}<br>
+      Losses: ${game.losses}<br>
+      Reputation: ${game.reputation}
+    </p>
+
+  </section>
+
+  `;
+
+  updateStats();
+
+}
+
+function chooseMove(){
+  enterCity();
+}
+
+function showProfile(){
+
+  document.getElementById("game").innerHTML=`
+
+  <section class="card">
+
+    <h2>👑 MY L3EON</h2>
+
+    <p class="rank">${rank()}</p>
+
+    <div class="unlock">
+      <span>💵 Cash</span>
+      <b>${money(game.cash)}</b>
+    </div>
+
+    <div class="unlock">
+      <span>👥 Fans</span>
+      <b>${game.fans}</b>
+    </div>
+
+    <div class="unlock">
+      <span>⭐ Fame</span>
+      <b>${game.fame}</b>
+    </div>
+
+    <div class="unlock">
+      <span>🎤 Skill</span>
+      <b>${game.skill}</b>
+    </div>
+
+    <div class="unlock">
+      <span>🔥 Streak</span>
+      <b>${game.streak}</b>
+    </div>
+
+    <div class="unlock">
+      <span>🏆 Battles</span>
+      <b>${game.wins}W / ${game.losses}L</b>
+    </div>
+
+    <div class="unlock">
+      <span>📍 Home Turf</span>
+      <b>${game.neighborhood}</b>
+    </div>
+
+  </section>
+
+  <section class="card">
+
+    <h2>📖 CAREER LOG</h2>
+
+    <div class="history">
+
+      ${
+        game.history.length
+        ? game.history.map(x=>`
+          <div class="historyItem">${x}</div>
+        `).join("")
+        : "<p>No history yet. Your story starts tonight.</p>"
+      }
+
+    </div>
+
+  </section>
+
+  <button class="secondary" onclick="renderHome()">
+    ← BACK
+  </button>
+
+  <button class="secondary" onclick="resetGame()">
+    ⚠️ RESET CAREER
+  </button>
+
+  `;
+
+}
+
+function resetGame(){
+
+  if(confirm("Reset your entire L3EON career?")){
+
+    game=JSON.parse(JSON.stringify(defaultGame));
+
+    save();
+
+    renderHome();
+
+  }
+
+}
+
+renderHome();
+
+</script>
+
+</body>
+</html>
