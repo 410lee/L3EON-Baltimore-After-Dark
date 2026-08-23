@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L3EON LIFE</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body{
+  margin:0;
+  background:#08050d;
+  color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.app{
+  max-width:700px;
+  margin:auto;
+  padding:18px;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.logo{
+  font-size:44px;
+  font-weight:900;
+  letter-spacing:-3px;
+}
+
+.logo span{
+  color:#c34cff;
+}
+
+.age{
+  border:1px solid #a746d4;
+  background:#120b19;
+  padding:13px 20px;
+  border-radius:30px;
+  font-weight:800;
+  font-size:18px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.stat{
+  background:#100b16;
+  border:1px solid #30203b;
+  border-radius:22px;
+  padding:18px;
+}
+
+.stat-label{
+  color:#aaa0b5;
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.stat-value{
+  font-size:28px;
+  font-weight:900;
+}
+
+.money{
+  color:#72e29b;
+}
+
+.card{
+  background:#100b16;
+  border:1px solid #472456;
+  border-radius:28px;
+  padding:24px;
+  margin-top:18px;
+}
+
+.card h2{
+  margin:0 0 8px;
+  font-size:25px;
+}
+
+.subtitle{
+  color:#aaa0b5;
+  line-height:1.5;
+  font-size:16px;
+}
+
+.divider{
+  height:1px;
+  background:#30203b;
+  margin:20px 0;
+}
+
+button{
+  width:100%;
+  border:0;
+  padding:17px;
+  border-radius:18px;
+  margin-top:10px;
+  font-size:17px;
+  font-weight:850;
+  color:white;
+  background:#17101e;
+  border:1px solid #633274;
+}
+
+button:active{
+  transform:scale(.98);
+}
+
+.primary{
+  background:linear-gradient(135deg,#8148ef,#d34ed7);
+  border:none;
+}
+
+.green{
+  background:#123321;
+  border-color:#276d45;
+}
+
+.red{
+  background:#35131b;
+  border-color:#702837;
+}
+
+.gold{
+  background:#30250d;
+  border-color:#8b6c22;
+}
+
+.action-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.action-grid button{
+  min-height:85px;
+}
+
+.action-title{
+  font-size:18px;
+}
+
+.action-desc{
+  display:block;
+  color:#a99fb1;
+  font-size:12px;
+  margin-top:5px;
+}
+
+.bar{
+  height:10px;
+  background:#25152d;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:8px;
+}
+
+.fill{
+  height:100%;
+  background:linear-gradient(90deg,#7d42eb,#d44ddd);
+}
+
+.skill{
+  margin-top:15px;
+}
+
+.skill-top{
+  display:flex;
+  justify-content:space-between;
+  font-weight:800;
+}
+
+.event{
+  border-left:4px solid #c64eff;
+  padding-left:15px;
+  color:#ddd2e3;
+  line-height:1.55;
+}
+
+.history-item{
+  padding:12px 0;
+  border-bottom:1px solid #2b1c34;
+  color:#c9becf;
+}
+
+.footer{
+  text-align:center;
+  color:#665d6b;
+  font-size:12px;
+  margin:30px 0 15px;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.78);
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:99;
+}
+
+.modal-box{
+  width:min(700px,100%);
+  background:#120c17;
+  border:1px solid #633274;
+  border-radius:30px 30px 0 0;
+  padding:25px;
+  max-height:85vh;
+  overflow:auto;
+}
+
+.modal-box h2{
+  margin-top:0;
+}
+
+.small{
+  color:#9e94a5;
+  font-size:13px;
+}
+
+@media(min-width:600px){
+  .stats{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+  .stat:first-child{
+    grid-column:span 2;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="header">
+    <div class="logo">L3<span>EON</span></div>
+    <div class="age" id="age">AGE 18</div>
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="stat-label">💵 MONEY</div>
+      <div class="stat-value money" id="money">$500</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">❤️ HEALTH</div>
+      <div class="stat-value" id="health">80</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">😊 HAPPINESS</div>
+      <div class="stat-value" id="happiness">70</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">⭐ FAME</div>
+      <div class="stat-value" id="fame">0</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">⚡ ENERGY</div>
+      <div class="stat-value" id="energy">80</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">🗣️ REPUTATION</div>
+      <div class="stat-value" id="reputation">50</div>
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>🌃 L3EON LIFE</h2>
+
+    <p class="subtitle">
+      Build your life from Baltimore neighborhood talent
+      into a name everybody knows.
+    </p>
+
+    <div class="event" id="currentEvent">
+      You just turned 18. Baltimore is yours to explore.
+      What kind of life are you going to build?
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>📊 CHARACTER</h2>
+
+    <div class="skill">
+      <div class="skill-top">
+        <span>🧠 Intelligence</span>
+        <span id="intelligence">60</span>
+      </div>
+      <div class="bar">
+        <div class="fill" id="intelligenceBar"></div>
+      </div>
+    </div>
+
+    <div class="skill">
+      <div class="skill-top">
+        <span>👀 Looks</span>
+        <span id="looks">65</span>
+      </div>
+      <div class="bar">
+        <div class="fill" id="looksBar"></div>
+      </div>
+    </div>
+
+    <div class="skill">
+      <div class="skill-top">
+        <span>🎤 Music Talent</span>
+        <span id="music">55</span>
+      </div>
+      <div class="bar">
+        <div class="fill" id="musicBar"></div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>🎮 WHAT DO YOU DO?</h2>
+
+    <div class="action-grid">
+
+      <button onclick="work()">
+        💼
+        <span class="action-title">Work</span>
+        <span class="action-desc">Make money</span>
+      </button>
+
+      <button onclick="makeMusic()">
+        🎤
+        <span class="action-title">Make Music</span>
+        <span class="action-desc">Build your career</span>
+      </button>
+
+      <button onclick="party()">
+        🎉
+        <span class="action-title">Go Out</span>
+        <span class="action-desc">Have some fun</span>
+      </button>
+
+      <button onclick="exercise()">
+        🏋️
+        <span class="action-title">Exercise</span>
+        <span class="action-desc">Improve health</span>
+      </button>
+
+      <button onclick="social()">
+        📱
+        <span class="action-title">Social Media</span>
+        <span class="action-desc">Gain followers</span>
+      </button>
+
+      <button onclick="relationship()">
+        ❤️
+        <span class="action-title">Dating</span>
+        <span class="action-desc">Meet somebody</span>
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>💼 CAREER</h2>
+
+    <div id="career">
+      Currently unemployed
+    </div>
+
+    <button onclick="careerMenu()" class="primary">
+      💼 CAREER OPTIONS
+    </button>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>🚗 POSSESSIONS</h2>
+
+    <div id="possessions">
+      You don't own much yet.
+    </div>
+
+    <button onclick="shopping()">
+      🛍️ GO SHOPPING
+    </button>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>📅 LIFE HISTORY</h2>
+
+    <div id="history">
+      Your story begins today.
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>⏭️ NEXT YEAR</h2>
+
+    <p class="subtitle">
+      Aging advances your life by one year and can trigger
+      a random life event.
+    </p>
+
+    <button onclick="ageUp()" class="primary">
+      🎂 AGE UP
+    </button>
+
+    <button onclick="newLife()" class="red">
+      🔄 START A NEW LIFE
+    </button>
+
+  </div>
+
+  <div class="footer">
+    BALTIMORE AFTER DARK • L3EON LIFE
+  </div>
+
+</div>
+
+
+<div class="modal" id="modal">
+
+  <div class="modal-box">
+
+    <h2 id="modalTitle">Life Event</h2>
+
+    <p id="modalText" class="subtitle"></p>
+
+    <div id="modalButtons"></div>
+
+    <button onclick="closeModal()">
+      Close
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+let game = JSON.parse(localStorage.getItem("l3eonLife")) || {
+
+  age:18,
+
+  money:500,
+
+  health:80,
+
+  happiness:70,
+
+  fame:0,
+
+  energy:80,
+
+  reputation:50,
+
+  intelligence:60,
+
+  looks:65,
+
+  music:55,
+
+  followers:10,
+
+  career:"Unemployed",
+
+  car:"None",
+
+  home:"Family Home",
+
+  relationship:"Single",
+
+  history:[
+
+    "Age 18 — Your L3EON LIFE begins."
+
+  ]
+
+};
+
+
+function save(){
+
+  localStorage.setItem(
+    "l3eonLife",
+    JSON.stringify(game)
+  );
+
+}
+
+
+function clamp(value){
+
+  return Math.max(0,Math.min(100,value));
+
+}
+
+
+function moneyFormat(value){
+
+  return "$" + Math.floor(value).toLocaleString();
+
+}
+
+
+function update(){
+
+  document.getElementById("age").textContent =
+    "AGE " + game.age;
+
+  document.getElementById("money").textContent =
+    moneyFormat(game.money);
+
+  document.getElementById("health").textContent =
+    game.health;
+
+  document.getElementById("happiness").textContent =
+    game.happiness;
+
+  document.getElementById("fame").textContent =
+    game.fame;
+
+  document.getElementById("energy").textContent =
+    game.energy;
+
+  document.getElementById("reputation").textContent =
+    game.reputation;
+
+  document.getElementById("intelligence").textContent =
+    game.intelligence;
+
+  document.getElementById("looks").textContent =
+    game.looks;
+
+  document.getElementById("music").textContent =
+    game.music;
+
+
+  document.getElementById("intelligenceBar").style.width =
+    game.intelligence + "%";
+
+  document.getElementById("looksBar").style.width =
+    game.looks + "%";
+
+  document.getElementById("musicBar").style.width =
+    game.music + "%";
+
+
+  document.getElementById("career").innerHTML =
+    "<strong>" + game.career + "</strong><br>" +
+    "<span class='small'>" +
+    game.followers.toLocaleString() +
+    " followers</span>";
+
+
+  document.getElementById("possessions").innerHTML =
+    "🚗 Car: <strong>" + game.car +
+    "</strong><br><br>" +
+    "🏠 Home: <strong>" + game.home +
+    "</strong><br><br>" +
+    "❤️ Relationship: <strong>" +
+    game.relationship +
+    "</strong>";
+
+
+  let historyHTML="";
+
+  game.history.slice().reverse().forEach(item=>{
+
+    historyHTML +=
+      "<div class='history-item'>" +
+      item +
+      "</div>";
+
+  });
+
+  document.getElementById("history").innerHTML =
+    historyHTML;
+
+  save();
+
+}
+
+
+function addHistory(text){
+
+  game.history.push(
+    "Age " + game.age + " — " + text
+  );
+
+  if(game.history.length > 30){
+
+    game.history.shift();
+
+  }
+
+}
+
+
+function work(){
+
+  if(game.energy < 15){
+
+    showEvent(
+      "You're Exhausted",
+      "You don't have enough energy to work today.",
+      []
+    );
+
+    return;
+
+  }
+
+  let earnings =
+    Math.floor(Math.random()*120)+80;
+
+  game.money += earnings;
+
+  game.energy -= 15;
+
+  game.happiness -= 3;
+
+  addHistory(
+    "You worked and earned " +
+    moneyFormat(earnings) + "."
+  );
+
+  showEvent(
+    "Payday 💵",
+    "You worked your shift and earned " +
+    moneyFormat(earnings) + ".",
+    []
+  );
+
+  update();
+
+}
+
+
+function makeMusic(){
+
+  if(game.energy < 20){
+
+    showEvent(
+      "No Energy 🎤",
+      "You're too exhausted to record right now.",
+      []
+    );
+
+    return;
+
+  }
+
+  game.energy -= 20;
+
+  let gain =
+    Math.floor(Math.random()*8)+3;
+
+  game.music =
+    clamp(game.music + gain);
+
+  if(Math.random() < .45){
+
+    game.fame =
+      clamp(game.fame + Math.floor(Math.random()*4)+1);
+
+  }
+
+  game.happiness =
+    clamp(game.happiness + 5);
+
+  addHistory(
+    "You spent the night recording music. Music talent +" +
+    gain + "."
+  );
+
+  showEvent(
+    "Studio Session 🎤",
+    "You locked in and recorded a new track. " +
+    "Your music talent increased by " + gain + ".",
+    []
+  );
+
+  update();
+
+}
+
+
+function party(){
+
+  if(game.money < 30){
+
+    showEvent(
+      "No Money 😭",
+      "You don't have enough money to go out tonight.",
+      []
+    );
+
+    return;
+
+  }
+
+  game.money -= 30;
+
+  game.happiness =
+    clamp(game.happiness + 15);
+
+  game.energy -= 10;
+
+  if(Math.random()<.25){
+
+    game.reputation =
+      clamp(game.reputation + 5);
+
+  }
+
+  addHistory(
+    "You went out for the night."
+  );
+
+  showEvent(
+    "Outside Tonight 🎉",
+    "You hit the city and had a good night.",
+    []
+  );
+
+  update();
+
+}
+
+
+function exercise(){
+
+  if(game.energy < 15){
+
+    showEvent(
+      "Too Tired",
+      "You need to rest before exercising.",
+      []
+    );
+
+    return;
+
+  }
+
+  game.energy -= 15;
+
+  game.health =
+    clamp(game.health + 8);
+
+  game.looks =
+    clamp(game.looks + 2);
+
+  game.happiness =
+    clamp(game.happiness + 3);
+
+  addHistory(
+    "You started taking your fitness seriously."
+  );
+
+  showEvent(
+    "Training Session 🏋️",
+    "You worked on your body and improved your health.",
+    []
+  );
+
+  update();
+
+}
+
+
+function social(){
+
+  let followers =
+    Math.floor(Math.random()*80)+20;
+
+  game.followers += followers;
+
+  game.fame =
+    clamp(game.fame + Math.floor(followers/40));
+
+  game.energy -= 5;
+
+  addHistory(
+    "Your social media grew by " +
+    followers + " followers."
+  );
+
+  showEvent(
+    "Going Viral 📱",
+    "Your content reached more people. +" +
+    followers + " followers.",
+    []
+  );
+
+  update();
+
+}
+
+
+function relationship(){
+
+  if(game.relationship !== "Single"){
+
+    showEvent(
+      "Already Taken ❤️",
+      "You're currently in a relationship with " +
+      game.relationship + ".",
+      []
+    );
+
+    return;
+
+  }
+
+  showEvent(
+
+    "Someone Caught Your Eye 👀",
+
+    "You meet somebody interesting while you're out in Baltimore. What do you do?",
+
+    [
+
+      {
+        text:"💘 Shoot Your Shot",
+        action:()=>{
+
+          game.relationship="Dating";
+
+          game.happiness =
+            clamp(game.happiness+15);
+
+          addHistory(
+            "You started dating someone."
+          );
+
+          closeModal();
+
+          update();
+
+        }
+      },
+
+      {
+        text:"😎 Keep It Casual",
+        action:()=>{
+
+          game.happiness =
+            clamp(game.happiness+5);
+
+          addHistory(
+            "You decided to keep things casual."
+          );
+
+          closeModal();
+
+          update();
+
+        }
+      }
+
+    ]
+
+  );
+
+}
+
+
+function careerMenu(){
+
+  showEvent(
+
+    "Career Choices 💼",
+
+    "What direction do you want your life to go?",
+
+    [
+
+      {
+        text:"🎤 Music Artist",
+        action:()=>{
+
+          game.career="Independent Artist";
+
+          game.music =
+            clamp(game.music+5);
+
+          addHistory(
+            "You officially started pursuing music."
+          );
+
+          closeModal();
+
+          update();
+
+        }
+      },
+
+      {
+        text:"💼 Regular Job",
+        action:()=>{
+
+          game.career="Working Professional";
+
+          addHistory(
+            "You got a steady job."
+          );
+
+          closeModal();
+
+          update();
+
+        }
+      },
+
+      {
+        text:"🏪 Entrepreneur",
+        action:()=>{
+
+          if(game.money < 300){
+
+            showEvent(
+              "Not Enough Capital",
+              "You need at least $300 to start a business.",
+              []
+            );
+
+            return;
+
+          }
+
+          game.money-=300;
+
+          game.career="Entrepreneur";
+
+          game.reputation =
+            clamp(game.reputation+10);
+
+          addHistory(
+            "You invested $300 into starting a business."
+          );
+
+          closeModal();
+
+          update();
+
+        }
+      }
+
+    ]
+
+  );
+
+}
+
+
+function shopping(){
+
+  showEvent(
+
+    "Shopping 🛍️",
+
+    "What do you want to spend your money on?",
+
+    [
+
+      {
+        text:"🚗 Buy Used Car — $1,500",
+        action:()=>{
+
+          if(game.money<1500){
+
+            alert("You don't have enough money.");
+
+            return;
+
+          }
+
+          game.money-=1500;
+
+          game.car="Used Car";
+
+          game.happiness =
+            clamp(game.happiness+10);
+
+          addHistory(
+            "You bought your first car."
+          );
+
+          closeModal();
+
+          update();
+
+        }
+      },
+
+      {
+        text:"👟 Buy Clothes — $150",
+        action:()=>{
+
+          if(game.money<150){
+
+            alert("You don't have enough money.");
+
+            return;
+
+          }
+
+          game.money-=150;
+
+          game.looks =
+            clamp(game.looks+5);
+
+          game.happiness =
+            clamp(game.happiness+8);
+
+          addHistory(
+            "You upgraded your wardrobe."
+          );
+
+          closeModal();
+
+          update();
+
+        }
+      },
+
+      {
+        text:"🏠 Save Money",
+        action:()=>{
+
+          game.happiness =
+            clamp(game.happiness+2);
+
+          addHistory(
+            "You decided to save your money."
+          );
+
+          closeModal();
+
+          update();
+
+        }
+      }
+
+    ]
+
+  );
+
+}
+
+
+function ageUp(){
+
+  game.age++;
+
+  game.energy=clamp(game.energy+25);
+
+  game.health=clamp(game.health-1);
+
+  game.happiness=clamp(game.happiness-2);
+
+  yearlyIncome();
+
+  randomEvent();
+
+  addHistory(
+    "You turned " + game.age + "."
+  );
+
+  update();
+
+}
+
+
+function yearlyIncome(){
+
+  if(game.career==="Working Professional"){
+
+    game.money += 2400;
+
+  }
+
+  if(game.career==="Independent Artist"){
+
+    let musicIncome =
+      Math.floor(game.fame*40);
+
+    game.money += musicIncome;
+
+  }
+
+  if(game.career==="Entrepreneur"){
+
+    game.money +=
+      Math.floor(Math.random()*2500)+1000;
+
+  }
+
+}
+
+
+function randomEvent(){
+
+  let events=[
+
+    {
+
+      title:"🎤 Open Mic Opportunity",
+
+      text:
+      "A local venue gives you a chance to perform.",
+
+      choices:[
+
+        {
+
+          text:"Perform",
+
+          action:()=>{
+
+            game.fame=clamp(game.fame+8);
+
+            game.music=clamp(game.music+5);
+
+            game.money+=150;
+
+            addHistory(
+              "You performed at a local venue."
+            );
+
+          }
+
+        },
+
+        {
+
+          text:"Skip It",
+
+          action:()=>{
+
+            game.energy=clamp(game.energy+5);
+
+          }
+
+        }
+
+      ]
+
+    },
+
+    {
+
+      title:"📱 Your Post Goes Viral",
+
+      text:
+      "One of your posts suddenly starts blowing up.",
+
+      choices:[
+
+        {
+
+          text:"Lean Into It",
+
+          action:()=>{
+
+            game.followers+=500;
+
+            game.fame=clamp(game.fame+10);
+
+            game.money+=200;
+
+            addHistory(
+              "A social media post went viral."
+            );
+
+          }
+
+        },
+
+        {
+
+          text:"Ignore It",
+
+          action:()=>{
+
+            game.happiness=
+              clamp(game.happiness+2);
+
+          }
+
+        }
+
+      ]
+
+    },
+
+    {
+
+      title:"💰 Unexpected Money",
+
+      text:
+      "You find $200 from an old side hustle you forgot about.",
+
+      choices:[
+
+        {
+
+          text:"Take It",
+
+          action:()=>{
+
+            game.money+=200;
+
+            addHistory(
+              "You received an unexpected $200."
+            );
+
+          }
+
+        }
+
+      ]
+
+    },
+
+    {
+
+      title:"❤️ Relationship Moment",
+
+      text:
+      "Someone you're close to wants to take your relationship to the next level.",
+
+      choices:[
+
+        {
+
+          text:"Make It Serious",
+
+          action:()=>{
+
+            game.relationship="Serious Relationship";
+
+            game.happiness=
+              clamp(game.happiness+15);
+
+            addHistory(
+              "Your relationship became serious."
+            );
+
+          }
+
+        },
+
+        {
+
+          text:"Not Ready",
+
+          action:()=>{
+
+            game.happiness=
+              clamp(game.happiness-3);
+
+          }
+
+        }
+
+      ]
+
+    },
+
+    {
+
+      title:"🔥 Baltimore Buzz",
+
+      text:
+      "People around the city are starting to recognize your name.",
+
+      choices:[
+
+        {
+
+          text:"Build The Brand",
+
+          action:()=>{
+
+            game.reputation=
+              clamp(game.reputation+10);
+
+            game.fame=
+              clamp(game.fame+5);
+
+            game.followers+=250;
+
+            addHistory(
+              "Your name started gaining local buzz."
+            );
+
+          }
+
+        }
+
+      ]
+
+    }
+
+  ];
+
+  let event =
+    events[Math.floor(Math.random()*events.length)];
+
+  showEvent(
+    event.title,
+    event.text,
+    event.choices
+  );
+
+}
+
+
+function showEvent(title,text,choices){
+
+  document.getElementById("modalTitle")
+    .textContent=title;
+
+  document.getElementById("modalText")
+    .textContent=text;
+
+  let buttons="";
+
+  choices.forEach((choice,index)=>{
+
+    buttons +=
+      "<button class='primary' " +
+      "onclick='runChoice("+index+")'>" +
+      choice.text +
+      "</button>";
+
+  });
+
+  document.getElementById("modalButtons")
+    .innerHTML=buttons;
+
+  window.currentChoices=choices;
+
+  document.getElementById("modal")
+    .style.display="flex";
+
+}
+
+
+function runChoice(index){
+
+  if(
+    window.currentChoices &&
+    window.currentChoices[index]
+  ){
+
+    window.currentChoices[index].action();
+
+  }
+
+  update();
+
+}
+
+
+function closeModal(){
+
+  document.getElementById("modal")
+    .style.display="none";
+
+}
+
+
+function newLife(){
+
+  if(!confirm(
+    "Start a brand new L3EON LIFE?"
+  )) return;
+
+  localStorage.removeItem("l3eonLife");
+
+  location.reload();
+
+}
+
+
+update();
+
+</script>
+
+</body>
+</html>
