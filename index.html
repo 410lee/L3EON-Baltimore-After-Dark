@@ -1425,7 +1425,948 @@ function newLife(){
   location.reload();
 
 }
+/* =========================================================
+   L3EON LIFE — BITLIFE STYLE EXPANSION
+   ========================================================= */
 
+/* ---------- SAVE DATA REPAIR ---------- */
+
+const defaults = {
+  age:18,
+  money:500,
+  health:80,
+  happiness:70,
+  fame:0,
+  energy:80,
+  reputation:50,
+  intelligence:60,
+  looks:65,
+  music:55,
+  followers:10,
+  career:"Unemployed",
+  car:"None",
+  home:"Family Home",
+  relationship:"Single",
+  education:"High School",
+  jobLevel:1,
+  jobTitle:"Unemployed",
+  salary:0,
+  monthlyExpenses:0,
+  friends:0,
+  enemies:0,
+  children:0,
+  albums:0,
+  songs:0,
+  concerts:0,
+  businesses:0,
+  debt:0,
+  fameLevel:"Unknown",
+  history:[
+    "Age 18 — Your L3EON LIFE begins."
+  ]
+};
+
+Object.keys(defaults).forEach(key=>{
+  if(game[key] === undefined || game[key] === null){
+    game[key] = defaults[key];
+  }
+});
+
+if(!Array.isArray(game.history)){
+  game.history = defaults.history.slice();
+}
+
+
+/* ---------- SAFE NUMBER SYSTEM ---------- */
+
+function num(value,fallback=0){
+  let n=Number(value);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+function stat(value){
+  return Math.round(clamp(num(value)));
+}
+
+
+/* ---------- LIFE STAGES ---------- */
+
+function lifeStage(){
+
+  if(game.age < 13) return "Child";
+  if(game.age < 18) return "Teenager";
+  if(game.age < 22) return "Young Adult";
+  if(game.age < 30) return "Adult";
+  if(game.age < 45) return "Established Adult";
+  if(game.age < 60) return "Middle Age";
+  if(game.age < 75) return "Senior";
+  return "Elder";
+}
+
+
+/* ---------- FAME LEVEL ---------- */
+
+function fameTitle(){
+
+  let f=num(game.fame);
+
+  if(f>=90) return "Global Superstar";
+  if(f>=75) return "National Star";
+  if(f>=60) return "Major Artist";
+  if(f>=40) return "Rising Star";
+  if(f>=20) return "Local Celebrity";
+  if(f>=5) return "Known Locally";
+
+  return "Unknown";
+}
+
+
+/* ---------- CAREER LEVEL ---------- */
+
+function careerRank(){
+
+  if(game.career==="Unemployed")
+    return "Unemployed";
+
+  if(game.career==="Independent Artist")
+    return "Independent Artist • Level "+game.jobLevel;
+
+  if(game.career==="Working Professional")
+    return "Professional • Level "+game.jobLevel;
+
+  if(game.career==="Entrepreneur")
+    return "Entrepreneur • Level "+game.jobLevel;
+
+  return game.career;
+}
+
+
+/* ---------- MONTHLY LIFE COSTS ---------- */
+
+function monthlyExpenses(){
+
+  let total=0;
+
+  if(game.home==="Family Home")
+    total+=0;
+
+  if(game.home==="Apartment")
+    total+=900;
+
+  if(game.home==="Luxury Apartment")
+    total+=2200;
+
+  if(game.home==="House")
+    total+=1800;
+
+  if(game.home==="Mansion")
+    total+=7000;
+
+  if(game.car!=="None")
+    total+=250;
+
+  if(game.relationship!=="Single")
+    total+=150;
+
+  total+=Math.max(0,game.children)*350;
+
+  return total;
+}
+
+
+/* ---------- REPUTATION ---------- */
+
+function reputationTitle(){
+
+  let r=num(game.reputation);
+
+  if(r>=90) return "Legendary";
+  if(r>=75) return "Respected";
+  if(r>=60) return "Known";
+  if(r>=40) return "Neutral";
+  if(r>=20) return "Questionable";
+
+  return "Disliked";
+}
+
+
+/* ---------- NEW LIFE DASHBOARD ---------- */
+
+function addLifeDashboard(){
+
+  if(document.getElementById("lifeExpansion"))
+    return;
+
+  let card=document.createElement("div");
+
+  card.className="card";
+  card.id="lifeExpansion";
+
+  card.innerHTML=`
+
+    <h2>📖 LIFE OVERVIEW</h2>
+
+    <div id="lifeOverview"></div>
+
+    <div class="divider"></div>
+
+    <h2>💳 FINANCES</h2>
+
+    <div id="financeOverview"></div>
+
+    <div class="divider"></div>
+
+    <h2>👥 SOCIAL LIFE</h2>
+
+    <div id="socialOverview"></div>
+
+    <div class="divider"></div>
+
+    <h2>🎤 MUSIC CAREER</h2>
+
+    <div id="musicOverview"></div>
+
+    <div class="divider"></div>
+
+    <h2>🎯 LIFE ACTIONS</h2>
+
+    <button onclick="goToSchool()">
+      🎓 Education
+    </button>
+
+    <button onclick="makeFriend()">
+      👥 Make Friends
+    </button>
+
+    <button onclick="restDay()">
+      🛌 Rest
+    </button>
+
+    <button onclick="releaseSong()" class="primary">
+      🎵 Release Music
+    </button>
+
+    <button onclick="performConcert()" class="gold">
+      🎤 Perform Concert
+    </button>
+
+    <button onclick="buyHome()">
+      🏠 Housing
+    </button>
+
+  `;
+
+  document.querySelector(".app")
+    .insertBefore(
+      card,
+      document.querySelector(".footer")
+    );
+}
+
+
+/* ---------- UPDATE EXPANSION ---------- */
+
+function updateExpansion(){
+
+  addLifeDashboard();
+
+  game.fame=fameTitle();
+
+  document.getElementById("lifeOverview").innerHTML=`
+
+    <strong>🎂 Age:</strong> ${game.age}
+    <br><br>
+
+    <strong>🧍 Life Stage:</strong> ${lifeStage()}
+    <br><br>
+
+    <strong>💼 Career:</strong> ${careerRank()}
+    <br><br>
+
+    <strong>🏠 Home:</strong> ${game.home}
+    <br><br>
+
+    <strong>❤️ Relationship:</strong>
+    ${game.relationship}
+
+  `;
+
+  document.getElementById("financeOverview").innerHTML=`
+
+    <strong>💵 Cash:</strong>
+    ${moneyFormat(num(game.money))}
+    <br><br>
+
+    <strong>💳 Debt:</strong>
+    ${moneyFormat(num(game.debt))}
+    <br><br>
+
+    <strong>🏦 Monthly Expenses:</strong>
+    ${moneyFormat(monthlyExpenses())}
+    <br><br>
+
+    <strong>💼 Salary:</strong>
+    ${moneyFormat(num(game.salary))}
+    
+  `;
+
+  document.getElementById("socialOverview").innerHTML=`
+
+    <strong>📱 Followers:</strong>
+    ${num(game.followers).toLocaleString()}
+    <br><br>
+
+    <strong>👥 Friends:</strong>
+    ${num(game.friends)}
+    <br><br>
+
+    <strong>😤 Enemies:</strong>
+    ${num(game.enemies)}
+    <br><br>
+
+    <strong>🗣️ Reputation:</strong>
+    ${reputationTitle()}
+
+  `;
+
+  document.getElementById("musicOverview").innerHTML=`
+
+    <strong>🎵 Songs:</strong>
+    ${num(game.songs)}
+    <br><br>
+
+    <strong>💿 Albums:</strong>
+    ${num(game.albums)}
+    <br><br>
+
+    <strong>🎤 Concerts:</strong>
+    ${num(game.concerts)}
+    <br><br>
+
+    <strong>⭐ Status:</strong>
+    ${fameTitle()}
+
+  `;
+
+}
+
+
+/* ---------- EDUCATION ---------- */
+
+function goToSchool(){
+
+  if(game.age<18){
+
+    showEvent(
+      "🎓 School",
+      "You're already attending school at your age.",
+      []
+    );
+
+    return;
+  }
+
+  showEvent(
+
+    "🎓 Education",
+
+    "What do you want to do with your education?",
+
+    [
+
+      {
+        text:"🏫 Community College",
+        action:()=>{
+
+          game.education="Community College";
+
+          game.intelligence=
+            stat(game.intelligence+8);
+
+          game.money-=500;
+
+          addHistory(
+            "You enrolled in community college."
+          );
+
+          closeModal();
+          update();
+
+        }
+      },
+
+      {
+        text:"🎓 University",
+        action:()=>{
+
+          if(game.money<1500){
+
+            showEvent(
+              "💸 Tuition Problem",
+              "You need $1,500 to afford the first year.",
+              []
+            );
+
+            return;
+          }
+
+          game.money-=1500;
+
+          game.education="University Graduate";
+
+          game.intelligence=
+            stat(game.intelligence+15);
+
+          game.reputation=
+            stat(game.reputation+5);
+
+          addHistory(
+            "You graduated from university."
+          );
+
+          closeModal();
+          update();
+
+        }
+      },
+
+      {
+        text:"❌ Skip School",
+        action:()=>{
+
+          game.happiness=
+            stat(game.happiness+3);
+
+          addHistory(
+            "You decided not to pursue higher education."
+          );
+
+          closeModal();
+          update();
+
+        }
+      }
+
+    ]
+
+  );
+
+}
+
+
+/* ---------- FRIENDS ---------- */
+
+function makeFriend(){
+
+  if(game.energy<10){
+
+    showEvent(
+      "😴 Too Tired",
+      "You don't have enough energy to socialize.",
+      []
+    );
+
+    return;
+  }
+
+  game.energy=stat(game.energy-10);
+
+  let gain=Math.floor(Math.random()*3)+1;
+
+  game.friends+=gain;
+
+  game.happiness=
+    stat(game.happiness+6);
+
+  game.reputation=
+    stat(game.reputation+2);
+
+  addHistory(
+    "You met new people and made "+gain+" friend(s)."
+  );
+
+  showEvent(
+    "👥 New Friends",
+    "Your social circle grew.",
+    []
+  );
+
+  update();
+}
+
+
+/* ---------- REST ---------- */
+
+function restDay(){
+
+  game.energy=stat(game.energy+30);
+
+  game.health=stat(game.health+3);
+
+  game.happiness=stat(game.happiness+4);
+
+  addHistory(
+    "You took some time to rest and recharge."
+  );
+
+  showEvent(
+    "🛌 Recharge",
+    "You stayed in, rested, and recovered your energy.",
+    []
+  );
+
+  update();
+}
+
+
+/* ---------- RELEASE MUSIC ---------- */
+
+function releaseSong(){
+
+  if(game.music<40){
+
+    showEvent(
+      "🎵 Not Ready",
+      "You need at least 40 Music Talent before releasing music.",
+      []
+    );
+
+    return;
+  }
+
+  if(game.energy<15){
+
+    showEvent(
+      "😴 Exhausted",
+      "You need more energy to finish the release.",
+      []
+    );
+
+    return;
+  }
+
+  game.energy=stat(game.energy-15);
+
+  game.songs++;
+
+  let success=
+    Math.random()<
+    (.25 + game.music/200 + game.fame/300);
+
+  if(success){
+
+    let followers=
+      Math.floor(Math.random()*1000)+250;
+
+    game.followers+=followers;
+
+    game.fame=
+      stat(game.fame+Math.floor(Math.random()*8)+3);
+
+    game.money+=
+      Math.floor(Math.random()*700)+200;
+
+    game.happiness=
+      stat(game.happiness+10);
+
+    addHistory(
+      "You released a song that performed well."
+    );
+
+    showEvent(
+      "🔥 THE SONG HIT!",
+      "Your release caught momentum and gained "+
+      followers.toLocaleString()+" followers.",
+      []
+    );
+
+  }else{
+
+    game.fame=
+      stat(game.fame+1);
+
+    game.happiness=
+      stat(game.happiness-2);
+
+    addHistory(
+      "You released a song that received a quiet response."
+    );
+
+    showEvent(
+      "🎵 Release Day",
+      "The song is out. The response was mixed, but you kept building.",
+      []
+    );
+
+  }
+
+  update();
+}
+
+
+/* ---------- CONCERT ---------- */
+
+function performConcert(){
+
+  if(game.fame<5){
+
+    showEvent(
+      "🎤 Not Yet",
+      "You need at least 5 Fame before venues will book you.",
+      []
+    );
+
+    return;
+  }
+
+  if(game.energy<25){
+
+    showEvent(
+      "😴 Exhausted",
+      "You need more energy before performing.",
+      []
+    );
+
+    return;
+  }
+
+  game.energy=stat(game.energy-25);
+
+  game.concerts++;
+
+  let payout=
+    Math.floor(game.fame*50)+
+    Math.floor(Math.random()*500);
+
+  game.money+=payout;
+
+  game.fame=
+    stat(game.fame+Math.floor(Math.random()*6)+2);
+
+  game.followers+=
+    Math.floor(Math.random()*500)+100;
+
+  game.happiness=
+    stat(game.happiness+12);
+
+  addHistory(
+    "You performed a concert and earned "+
+    moneyFormat(payout)+"."
+  );
+
+  showEvent(
+    "🎤 SHOWTIME!",
+    "You performed live and earned "+
+    moneyFormat(payout)+".",
+    []
+  );
+
+  update();
+}
+
+
+/* ---------- HOUSING ---------- */
+
+function buyHome(){
+
+  showEvent(
+
+    "🏠 Where Do You Live?",
+
+    "Your living situation affects your monthly expenses.",
+
+    [
+
+      {
+        text:"🏠 Family Home — FREE",
+        action:()=>{
+
+          game.home="Family Home";
+
+          addHistory(
+            "You moved back into the family home."
+          );
+
+          closeModal();
+          update();
+
+        }
+      },
+
+      {
+        text:"🏢 Apartment — $900/mo",
+        action:()=>{
+
+          game.home="Apartment";
+
+          addHistory(
+            "You moved into your own apartment."
+          );
+
+          closeModal();
+          update();
+
+        }
+      },
+
+      {
+        text:"🏙️ Luxury Apartment — $2,200/mo",
+        action:()=>{
+
+          if(game.money<3000){
+
+            showEvent(
+              "💸 Too Expensive",
+              "You should have at least $3,000 saved before moving into a luxury apartment.",
+              []
+            );
+
+            return;
+          }
+
+          game.home="Luxury Apartment";
+
+          game.happiness=
+            stat(game.happiness+10);
+
+          addHistory(
+            "You upgraded to a luxury apartment."
+          );
+
+          closeModal();
+          update();
+
+        }
+      },
+
+      {
+        text:"🏡 House — $1,800/mo",
+        action:()=>{
+
+          if(game.money<10000){
+
+            showEvent(
+              "🏦 Mortgage Problem",
+              "You should have at least $10,000 saved before buying a house.",
+              []
+            );
+
+            return;
+          }
+
+          game.home="House";
+
+          game.happiness=
+            stat(game.happiness+15);
+
+          addHistory(
+            "You bought your first house."
+          );
+
+          closeModal();
+          update();
+
+        }
+      }
+
+    ]
+
+  );
+}
+
+
+/* ---------- REALISTIC YEARLY LIFE SIMULATION ---------- */
+
+function yearlyLifeChanges(){
+
+  let expenses=monthlyExpenses()*12;
+
+  game.money-=expenses;
+
+  if(game.money<0){
+
+    game.debt+=Math.abs(game.money);
+    game.money=0;
+
+    game.happiness=
+      stat(game.happiness-8);
+
+    addHistory(
+      "Your expenses pushed you into debt."
+    );
+
+  }
+
+  if(game.age>=30){
+
+    game.health=
+      stat(game.health-Math.floor(Math.random()*3));
+
+  }
+
+  if(game.age>=40){
+
+    game.health=
+      stat(game.health-Math.floor(Math.random()*4));
+
+  }
+
+  game.energy=stat(game.energy+20);
+
+}
+
+
+/* ---------- UPGRADED AGE SYSTEM ---------- */
+
+function ageUp(){
+
+  game.age++;
+
+  yearlyLifeChanges();
+
+  game.energy=stat(game.energy+25);
+
+  game.health=stat(game.health-1);
+
+  game.happiness=stat(game.happiness-2);
+
+  yearlyIncome();
+
+  /* career progression */
+
+  if(game.career!=="Unemployed"){
+
+    if(Math.random()<.45){
+
+      game.jobLevel++;
+
+      game.salary+=500;
+
+      game.reputation=
+        stat(game.reputation+3);
+
+      addHistory(
+        "You received a career promotion."
+      );
+
+    }
+
+  }
+
+  /* natural growth */
+
+  if(game.age<30){
+
+    if(Math.random()<.35)
+      game.intelligence=stat(game.intelligence+1);
+
+  }
+
+  /* social growth */
+
+  if(Math.random()<.30){
+
+    game.followers+=
+      Math.floor(Math.random()*250);
+
+  }
+
+  randomEvent();
+
+  addHistory(
+    "You turned "+game.age+"."
+  );
+
+  update();
+
+}
+
+
+/* ---------- UPGRADED YEARLY INCOME ---------- */
+
+function yearlyIncome(){
+
+  if(game.career==="Working Professional"){
+
+    let salary=
+      2400+
+      (game.jobLevel*1000);
+
+    game.salary=salary;
+
+    game.money+=salary;
+
+  }
+
+  if(game.career==="Independent Artist"){
+
+    let musicIncome=
+      Math.floor(game.fame*40)+
+      Math.floor(game.songs*75);
+
+    game.salary=musicIncome;
+
+    game.money+=musicIncome;
+
+  }
+
+  if(game.career==="Entrepreneur"){
+
+    let profit=
+      Math.floor(Math.random()*2500)+
+      1000+
+      (game.jobLevel*500);
+
+    game.salary=profit;
+
+    game.money+=profit;
+
+  }
+
+}
+
+
+/* ---------- UPGRADED UPDATE ---------- */
+
+const oldUpdate = update;
+
+update = function(){
+
+  /* repair every numeric stat */
+
+  game.money=num(game.money,500);
+  game.health=stat(game.health,80);
+  game.happiness=stat(game.happiness,70);
+  game.fame=stat(game.fame,0);
+  game.energy=stat(game.energy,80);
+  game.reputation=stat(game.reputation,50);
+  game.intelligence=stat(game.intelligence,60);
+  game.looks=stat(game.looks,65);
+  game.music=stat(game.music,55);
+  game.followers=num(game.followers,10);
+  game.friends=num(game.friends,0);
+  game.enemies=num(game.enemies,0);
+  game.children=num(game.children,0);
+  game.songs=num(game.songs,0);
+  game.albums=num(game.albums,0);
+  game.concerts=num(game.concerts,0);
+  game.jobLevel=num(game.jobLevel,1);
+  game.debt=num(game.debt,0);
+
+  oldUpdate();
+
+  updateExpansion();
+
+  save();
+
+};
+
+
+/* ---------- INITIALIZE ---------- */
+
+addLifeDashboard();
+
+game.fameTitle=fameTitle();
 
 update();
 
